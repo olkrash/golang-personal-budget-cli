@@ -53,7 +53,7 @@ var errDuplicateEntry = errors.New("Cannot add duplicate entry")
 
 // AddItem adds an item to the current budget
 func (b *Budget) AddItem(description string, price float32) error {
-	if b.CurrentCost()+price > b.Max {
+	if (b.CurrentCost() + price) > b.Max {
 		return errDoesNotFitBudget
 	}
 	newItem := Item{Description: description, Price: price}
@@ -73,13 +73,14 @@ func (b *Budget) RemoveItem(description string) {
 
 // CreateBudget creates a new budget with a specified max
 func CreateBudget(month time.Month, max float32) (*Budget, error) {
+	var newBudget *Budget
 	if len(report) >= 12 {
 		return nil, errReportIsFull
 	}
 	if _, hasEntry := report[month]; hasEntry {
 		return nil, errDuplicateEntry
 	}
-	newBudget := &Budget{Max: max}
+	newBudget = &Budget{Max: max}
 	newBudget = report[month]
 
 	return newBudget, nil
@@ -87,10 +88,10 @@ func CreateBudget(month time.Month, max float32) (*Budget, error) {
 
 // GetBudget returns budget for given month
 func GetBudget(month time.Month) *Budget {
-	budget, ok := report[month];
-	if ok {
+	if budget, ok := report[month]; ok {
 		return budget
 	}
+
 	return nil
 }
 
